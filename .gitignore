@@ -409,4 +409,4 @@ FodyWeavers.xsd
 *dict/
 *models/
 *onnxruntime/
-.wav
+*.wav
