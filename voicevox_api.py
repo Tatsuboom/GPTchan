@@ -13,10 +13,10 @@ def createvoice(text_message):
         synthesizer.load_voice_model(model)
 
     #テキスト音声合成
-    style_id = 5
+    style_id = 8
 
     query = synthesizer.create_audio_query(text=text_message, style_id=style_id)
-    query.speed_scale = 1.5
+    query.speed_scale = 1.2
 
     wav = synthesizer.synthesis(audio_query=query,style_id=style_id)
     with open("output.wav", "wb") as f:

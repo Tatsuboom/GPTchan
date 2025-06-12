@@ -11,11 +11,11 @@ def createTextResponse(input_massage):
 
     if preresponce_id:
         response = GPTclient.responses.create(
-        model="gpt-4.1 mini",
-        instructions="日本語,口語調,100文字以内",
+        model="gpt-4.1",
+        instructions="日本語,口語調,100文字以内,ツンデレ",
         input= input_massage,
         max_output_tokens=400,
-        temperature=0.3,
+        temperature=0.2,
         previous_response_id = preresponce_id
         )
         preresponce_id = response.id
@@ -23,15 +23,14 @@ def createTextResponse(input_massage):
     else:
         response = GPTclient.responses.create(
             model="gpt-4.1",
-            instructions="日本語,口語調,100文字以内",
+            instructions="日本語,口語調,100文字以内,ツンデレ",
             input= input_massage,
             max_output_tokens=400,
-            temperature=0.3,
+            temperature=0.2,
         )
         preresponce_id = response.id
 
     if response.error != None:
         return response.error
     
-    print(preresponce_id)
     return response.output_text
