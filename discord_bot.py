@@ -1,7 +1,6 @@
 import os
 import discord
 import logging
-import time 
 from discord.ext import commands
 from dotenv import load_dotenv
 import gpt_api
