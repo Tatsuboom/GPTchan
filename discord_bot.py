@@ -1,5 +1,7 @@
 import os
 import discord
+import logging
+import time 
 from discord.ext import commands
 from dotenv import load_dotenv
 import gpt_api
@@ -9,12 +11,14 @@ import voicevox_api
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.voice_states = True
 intents.members = True
 client = commands.Bot(command_prefix='!',intents=intents)
+
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+
 
 voiceclient = None
 
@@ -43,6 +47,7 @@ async def on_message(message):
     if client.user in message.mentions and not message.mention_everyone:
         message.content = message.content.replace('<@1373748611866820739>','')
         await conversation(message)
+
     await client.process_commands(message)
 
 @client.command()
@@ -85,5 +90,5 @@ async def on_voice_state_update(member,before,after):
         await voiceclient.disconnect()
         voiceclient = None
 
-client.run(DISCORD_TOKEN)
+client.run(DISCORD_TOKEN,log_handler=handler)
 
