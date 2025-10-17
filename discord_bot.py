@@ -29,7 +29,7 @@ async def on_ready():
 #会話生成
 async def conversation(text):
     if text.content == None or len(text.content) <= 1:
-        await text.channel.send("呼んだ？")
+        await text.channel.send("よんだ？")
         return
         
     async with text.channel.typing():
@@ -54,6 +54,38 @@ async def talk(ctx):
     ctx.message.content = ctx.message.content.replace('!talk','')
     await conversation(ctx.message)
 
+@client.command()
+async def roll(ctx):
+    roll = ctx.message.content.replace('!roll','')
+    roll = roll.replace('\n','').strip()
+
+    if len(roll) > 30:
+        await ctx.channel.send("ながすぎておぼえられないよ！")
+        return
+    
+    if not roll:
+        await ctx.channel.send("なにをおぼえてほしいの？")
+        return
+
+    file_path = 'SubRolls.txt'
+    try:
+        if os.path.exists(file_path):
+            with open('SubRolls.txt', 'r', encoding='utf-8') as f:
+                content = f.read().strip()
+                items = [s for s in content.split('\n') if s.strip()]
+        else:
+            items = []
+
+        items.insert(0, roll)
+        items = items[:10]
+
+        with open(file_path,'w',encoding='utf-8') as f:
+            f.write('\n'.join(items))    
+    except Exception as e:
+        await ctx.channel.send(f"えらーえらーえらー！: {e}")
+        return
+
+    await ctx.channel.send(roll + "！おぼえた！")
 
 #ボイスチャンネル接続
 @client.command()
@@ -64,7 +96,7 @@ async def vc(ctx):
         return
     
     voiceclient = await ctx.author.voice.channel.connect()
-    await ctx.channel.send("来たよー")
+    await ctx.channel.send("きたよー")
     return
 
 #ボイスチャンネル退出
@@ -90,4 +122,3 @@ async def on_voice_state_update(member,before,after):
         voiceclient = None
 
 client.run(DISCORD_TOKEN,log_handler=handler)
-
