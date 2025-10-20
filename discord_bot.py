@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import gpt_api
 import voicevox_api
 
-# .envからディスコードのトークンを読み込む
+#トークンの読み込み、初期状態の設定
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
@@ -41,6 +41,7 @@ async def conversation(text):
 
             await text.channel.send(output_text)
 
+#メンションでの会話
 @client.event
 async def on_message(message):
     if client.user in message.mentions and not message.mention_everyone:
@@ -49,11 +50,13 @@ async def on_message(message):
 
     await client.process_commands(message)
 
+#コマンドでの会話
 @client.command()
 async def talk(ctx):
     ctx.message.content = ctx.message.content.replace('!talk','')
     await conversation(ctx.message)
 
+#ロール追加
 @client.command()
 async def roll(ctx):
     roll = ctx.message.content.replace('!roll','')

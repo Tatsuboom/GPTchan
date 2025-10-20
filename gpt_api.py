@@ -15,7 +15,7 @@ def createTextResponse(input_massage):
     if preresponce_id:
         response = GPTclient.responses.create(
         model="gpt-4.1",
-        instructions="条件2より条件1を必ず優先すること #条件1「日本語,口語調,100文字以内」条件2「" + rolltext + "」",
+        instructions="日本語,口語調,100文字以内" + rolltext,
         input=input_massage,
         max_output_tokens=400,
         temperature=0.2,
@@ -26,7 +26,7 @@ def createTextResponse(input_massage):
     else:
         response = GPTclient.responses.create(
             model="gpt-4.1",
-            instructions="条件2より条件1を必ず優先すること #条件1「日本語,口語調,100文字以内」条件2「" + rolltext + "」",
+            instructions="日本語,口語調,100文字以内" + rolltext,
             input=input_massage,
             max_output_tokens=400,
             temperature=0.2,
