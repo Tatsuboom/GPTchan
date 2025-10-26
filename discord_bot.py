@@ -1,6 +1,8 @@
 import os
 import discord
 import logging
+import asyncio
+import time
 from discord.ext import commands
 from dotenv import load_dotenv
 import gpt_api
@@ -33,13 +35,18 @@ async def conversation(text):
         return
         
     async with text.channel.typing():
-        output_text = gpt_api.createTextResponse(text.content)
+        start_gpt = time.perf_counter() #Timetest
+        output_text = await asyncio.to_thread(gpt_api.createTextResponse,text.content)
+        end_gpt = time.perf_counter() #Timetest
         if output_text:
             if voiceclient != None and voiceclient.is_connected():
-                voicevox_api.createvoice(output_text)
+                start_voice = time.perf_counter() #Timetest
+                await asyncio.to_thread(voicevox_api.createvoice,output_text)
                 voiceclient.play(discord.FFmpegPCMAudio("output.wav"))
-
+                end_voice = time.perf_counter() #Timetest
             await text.channel.send(output_text)
+            print(f"GPT生成時間: {end_gpt - start_gpt:.2f} 秒") #Timetest
+            print(f"音声生成時間: {end_voice - start_voice:.2f} 秒") #Timetest
 
 #メンションでの会話
 @client.event
